@@ -1,0 +1,19 @@
+{{ $p := . }}
+<article class="adv-card">
+  <a class="adv-card__link" href="{{ $p.RelPermalink }}">
+    <header class="adv-card__head">
+      <span class="adv-card__monogram" aria-hidden="true">{{ partial "svg/monogram.html" . }}</span>
+      <div>
+        <h3 class="adv-card__title">{{ $p.Title }}</h3>
+        {{ with $p.Params.subtitle }}<p class="adv-card__sub">{{ . }}</p>{{ end }}
+      </div>
+    </header>
+    <p class="adv-card__summary">{{ with $p.Params.summary }}{{ . | safeHTML }}{{ else }}{{ $p.Summary }}{{ end }}</p>
+    <footer class="adv-card__meta">
+      {{ with $p.Params.difficulty }}<span class="chip chip--difficulty">{{ . }}</span>{{ end }}
+      {{ with $p.Params.duration }}<span class="chip">{{ . }}</span>{{ end }}
+      {{ with $p.Params.players }}<span class="chip">{{ . }} investigatori</span>{{ end }}
+      {{ range $p.Params.tags }}<span class="chip chip--tag">#{{ . }}</span>{{ end }}
+    </footer>
+  </a>
+</article>

@@ -1,0 +1,13 @@
+{{- /*
+  JSON payload consumed by sherlock.justplaybo.it (AdventureService).
+  We render the data file verbatim so map keys (e.g. "3SO") keep their
+  original case — Hugo's front-matter loader lowercases map keys, so
+  the source of truth for the wire format lives in /data/adventures/.
+*/ -}}
+{{- $slug := .File.ContentBaseName -}}
+{{- $data := index .Site.Data.adventures $slug -}}
+{{- with $data -}}
+{{ . | jsonify (dict "indent" "  ") }}
+{{- else -}}
+{{ dict "error" (printf "no data file at data/adventures/%s.json" $slug) | jsonify (dict "indent" "  ") }}
+{{- end -}}

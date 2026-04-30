@@ -1,0 +1,147 @@
+{{ define "bodyclass" }}page page--adventure{{ end }}
+{{ define "head" }}
+{{ $jsonURL := printf "%sindex.json" .RelPermalink }}
+<link rel="alternate" type="application/json" href="{{ $jsonURL }}" title="{{ .Title }} — payload SHIC">
+{{ end }}
+{{ define "main" }}
+{{ $slug    := .File.ContentBaseName }}
+{{ $meta    := .Params }}
+{{ $data    := index .Site.Data.adventures $slug }}
+{{ $jsonURL := printf "%sindex.json" .RelPermalink }}
+{{ $advId   := default $slug $data.id }}
+<article class="adventure">
+  <header class="adventure__head">
+    <p class="adventure__eyebrow">Caso · ID <code>{{ $advId }}</code> · schema v{{ default 1 $data.version }}</p>
+    <h1 class="adventure__title">{{ .Title }}</h1>
+    {{ with $meta.subtitle }}<p class="adventure__sub">{{ . }}</p>{{ end }}
+    <ul class="adventure__chips">
+      {{ with $meta.difficulty }}<li class="chip chip--difficulty">{{ . }}</li>{{ end }}
+      {{ with $meta.duration }}<li class="chip">{{ . }}</li>{{ end }}
+      {{ with $meta.players }}<li class="chip">{{ . }} investigatori</li>{{ end }}
+      {{ with $meta.author }}<li class="chip chip--ghost">di {{ . }}</li>{{ end }}
+      {{ range $meta.tags }}<li class="chip chip--tag">#{{ . }}</li>{{ end }}
+    </ul>
+    <div class="adventure__actions">
+      <a class="btn btn--primary" href="{{ $.Site.Params.gameUrl }}?adventure={{ $advId }}" rel="noopener">Apri nel companion</a>
+      <a class="btn btn--ghost" href="{{ $jsonURL }}" download>Scarica JSON</a>
+    </div>
+  </header>
+
+  {{ if not $data }}
+  <section class="adventure__section">
+    <p class="muted">Payload mancante: aggiungi <code>data/adventures/{{ $slug }}.json</code> per pubblicare l'avventura.</p>
+  </section>
+  {{ else }}
+
+  {{ with $data.intro }}
+  <section class="adventure__section adventure__section--intro">
+    <h2 class="section__title">{{ default "Introduzione" .title }}</h2>
+    <div class="prose">{{ .html | safeHTML }}</div>
+  </section>
+  {{ end }}
+
+  {{ with $data.places }}
+  <section class="adventure__section">
+    <h2 class="section__title">Luoghi e indizi</h2>
+    <p class="muted">Ogni voce è una zona della mappa di Londra. Le righe condizionali si rivelano se avete cerchiato le lettere indicate.</p>
+    <ol class="places">
+      {{ range $id, $place := . }}
+        <li class="places__item" id="place-{{ $id }}">
+          <header class="places__head">
+            <span class="places__pin" aria-hidden="true">{{ $id }}</span>
+            <h3 class="places__title">Punto <code>{{ $id }}</code></h3>
+          </header>
+          {{ if reflect.IsMap $place }}
+            {{ with $place.default }}<div class="places__body prose">{{ . | safeHTML }}</div>{{ end }}
+            {{ with $place.conditional }}
+              <ul class="places__conditional">
+                {{ range . }}
+                  <li>
+                    <p class="places__requires">Richiede:
+                      {{ range .requires }}<span class="letter">{{ . }}</span>{{ end }}
+                    </p>
+                    <div class="prose">{{ .html | safeHTML }}</div>
+                  </li>
+                {{ end }}
+              </ul>
+            {{ end }}
+          {{ else }}
+            <div class="places__body prose">{{ $place | safeHTML }}</div>
+          {{ end }}
+        </li>
+      {{ end }}
+    </ol>
+  </section>
+  {{ end }}
+
+  {{ with $data.questions }}
+  <section class="adventure__section adventure__section--spoiler" data-spoiler="questions">
+    <header class="spoiler__head">
+      <h2 class="section__title">Domande</h2>
+      <button class="spoiler__toggle" type="button" aria-expanded="false">Rivela ▸</button>
+    </header>
+    <div class="spoiler__body">
+      {{ with .primary }}{{ partial "questions-block.html" . }}{{ end }}
+      {{ with .secondary }}{{ partial "questions-block.html" . }}{{ end }}
+    </div>
+  </section>
+  {{ end }}
+
+  {{ with $data.sherlockPath }}
+  <section class="adventure__section adventure__section--spoiler" data-spoiler="path">
+    <header class="spoiler__head">
+      <h2 class="section__title">{{ default "Percorso di Sherlock Holmes" .title }}</h2>
+      <button class="spoiler__toggle" type="button" aria-expanded="false">Rivela ▸</button>
+    </header>
+    <div class="spoiler__body">
+      <ol class="path">
+        {{ range .steps }}
+          <li class="path__step">
+            <h3 class="path__title">
+              {{ .title }}
+              {{ with .at }} <code class="path__at">{{ . }}</code>{{ end }}
+            </h3>
+            {{ with .description }}<p class="prose">{{ . | safeHTML }}</p>{{ end }}
+            {{ with .gains }}
+              <p class="path__gains">Lettere ottenute: {{ range . }}<span class="letter">{{ . }}</span>{{ end }}</p>
+            {{ end }}
+          </li>
+        {{ end }}
+      </ol>
+    </div>
+  </section>
+  {{ end }}
+
+  {{ with $data.solution }}
+  <section class="adventure__section adventure__section--spoiler adventure__section--solution" data-spoiler="solution">
+    <header class="spoiler__head">
+      <h2 class="section__title">{{ default "Soluzione" .title }}</h2>
+      <button class="spoiler__toggle" type="button" aria-expanded="false">Apri il dossier ▸</button>
+    </header>
+    <div class="spoiler__body">
+      <div class="prose">{{ .html | safeHTML }}</div>
+    </div>
+  </section>
+  {{ end }}
+
+  {{ end }}
+
+  {{ with .Content }}
+  <section class="adventure__section">
+    <h2 class="section__title">Note dell'autore</h2>
+    <div class="prose">{{ . }}</div>
+  </section>
+  {{ end }}
+
+  <footer class="adventure__foot">
+    <p class="muted">
+      Endpoint API: <code>{{ $jsonURL }}</code> ·
+      Schema: <a href="{{ "/about/#schema" | relLangURL }}">v{{ default 1 $data.version }}</a>
+    </p>
+  </footer>
+</article>
+{{ end }}
+{{ define "scripts" }}
+{{ $js := resources.Get "js/spoiler.js" | resources.Minify | resources.Fingerprint }}
+<script src="{{ $js.RelPermalink }}" integrity="{{ $js.Data.Integrity }}" defer></script>
+{{ end }}

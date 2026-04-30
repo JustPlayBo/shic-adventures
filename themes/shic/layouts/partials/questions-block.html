@@ -1,0 +1,13 @@
+{{ $block := . }}
+<div class="questions">
+  <h3 class="questions__title">{{ default "Domande" $block.title }}</h3>
+  <ol class="questions__list">
+    {{ range $block.items }}
+      <li class="questions__item">
+        <p class="questions__q"><strong>{{ .text }}</strong>{{ with .points }} <span class="chip chip--points">+{{ . }}</span>{{ end }}</p>
+        <p class="questions__a">{{ .answer | safeHTML }}</p>
+        {{ with .rationale }}<p class="questions__rationale"><em>{{ . | safeHTML }}</em></p>{{ end }}
+      </li>
+    {{ end }}
+  </ol>
+</div>

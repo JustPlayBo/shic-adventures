@@ -1,0 +1,4 @@
+# Extensionless API path expected by sherlock.justplaybo.it (AdventureService).
+# Rewrite to the page-bundle JSON output Hugo emits at /adventures/<slug>/index.json.
+/adventures/:slug   /adventures/:slug/index.json   200!
+/adventures/:slug.json   /adventures/:slug/index.json   200!

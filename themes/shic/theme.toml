@@ -1,0 +1,12 @@
+name = "SHIC"
+license = "MIT"
+licenselink = "https://opensource.org/licenses/MIT"
+description = "Victorian, sepia-toned theme for Sherlock Holmes — Consulente Investigativo adventures."
+homepage = "https://github.com/JustPlayBo/shic-adventures"
+tags = ["sherlock", "victorian", "sepia", "rpg", "boardgame", "italian"]
+features = ["catalog", "json-output", "victorian"]
+min_version = "0.128.0"
+
+[author]
+name = "JustPlayBo"
+homepage = "https://justplaybo.it"

@@ -1,0 +1,88 @@
+name: Deploy Hugo to GitHub Pages
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+# One concurrent deployment, but don't cancel an in-flight one.
+concurrency:
+  group: pages
+  cancel-in-progress: false
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+env:
+  HUGO_VERSION: 0.128.0
+
+jobs:
+  build:
+    name: Build site
+    runs-on: ubuntu-latest
+    steps:
+      - name: Install Hugo (extended)
+        run: |
+          set -euo pipefail
+          curl -sSLo hugo.deb \
+            "https://github.com/gohugoio/hugo/releases/download/v${HUGO_VERSION}/hugo_extended_${HUGO_VERSION}_linux-amd64.deb"
+          sudo dpkg -i hugo.deb
+
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          submodules: recursive
+          fetch-depth: 0
+
+      - name: Configure Pages
+        id: pages
+        uses: actions/configure-pages@v5
+
+      - name: Build
+        env:
+          HUGO_ENV: production
+          HUGO_ENABLEGITINFO: "true"
+        run: |
+          hugo \
+            --gc \
+            --minify \
+            --baseURL "${{ steps.pages.outputs.base_url }}/"
+
+      - name: Flatten adventure JSON for the companion API
+        # Hugo emits page-bundle JSON at /adventures/<slug>/index.json. GitHub
+        # Pages will 301 /adventures/<slug> to /adventures/<slug>/ (HTML page
+        # bundle), so the extensionless rewrite that works on Netlify is not
+        # available here. We drop a flat /adventures/<slug>.json sibling so the
+        # companion can fetch with a deterministic path on either platform.
+        run: |
+          set -euo pipefail
+          shopt -s nullglob
+          for d in public/adventures/*/; do
+            slug=$(basename "$d")
+            if [ -f "$d/index.json" ]; then
+              cp "$d/index.json" "public/adventures/${slug}.json"
+            fi
+          done
+          ls public/adventures/
+
+      - name: CNAME
+        run: echo "adventures.sherlock.justplaybo.it" > public/CNAME
+
+      - name: Upload artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: ./public
+
+  deploy:
+    name: Deploy to Pages
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Deploy
+        id: deployment
+        uses: actions/deploy-pages@v4

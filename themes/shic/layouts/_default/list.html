@@ -1,0 +1,17 @@
+{{ define "bodyclass" }}page page--list{{ end }}
+{{ define "main" }}
+<header class="page-head">
+  <p class="page-head__eyebrow">Dossier</p>
+  <h1 class="page-head__title">{{ .Title }}</h1>
+  {{ with .Description }}<p class="page-head__lede">{{ . }}</p>{{ end }}
+  {{ with .Content }}<div class="prose">{{ . }}</div>{{ end }}
+</header>
+
+<div class="adv-grid">
+  {{ range .Pages }}
+    {{ partial "adventure-card.html" . }}
+  {{ else }}
+    <p class="muted">Il fascicolo è vuoto. Tornate fra poco.</p>
+  {{ end }}
+</div>
+{{ end }}

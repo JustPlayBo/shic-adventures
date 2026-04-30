@@ -1,0 +1,47 @@
+{{ define "bodyclass" }}page page--home{{ end }}
+{{ define "main" }}
+<section class="hero">
+  <div class="hero__plate">
+    <p class="hero__eyebrow">221B Baker Street · Archivio</p>
+    <h1 class="hero__title">{{ .Site.Title }}</h1>
+    <p class="hero__lede">{{ .Site.Params.description }}</p>
+    <p class="hero__cta">
+      <a class="btn btn--primary" href="{{ "/adventures/" | relLangURL }}">Sfoglia il dossier</a>
+      <a class="btn btn--ghost" href="{{ .Site.Params.gameUrl }}" rel="noopener">Apri il companion</a>
+    </p>
+    <ul class="hero__rule">
+      <li><strong>{{ len (where .Site.RegularPages "Section" "adventures") }}</strong> avventure</li>
+      <li><strong>v1</strong> schema</li>
+      <li><strong>JSON</strong> pubblico</li>
+    </ul>
+  </div>
+  <aside class="hero__quote">
+    <blockquote>
+      «<em>Holmes</em>, gli dissi, «vedo che avete riflettuto a lungo: il fascicolo è di nuovo aperto sul tavolo.»<br>
+      Egli sorrise senza sollevare lo sguardo: «<em>Watson</em>, le avventure non si chiudono mai. Si archiviano.»
+    </blockquote>
+    <cite>— Annotazione, taccuino di J. H. Watson</cite>
+  </aside>
+</section>
+
+<section class="section">
+  <header class="section__head">
+    <h2 class="section__title">Avventure recenti</h2>
+    <a class="section__more" href="{{ "/adventures/" | relLangURL }}">Tutte le avventure →</a>
+  </header>
+  <div class="adv-grid">
+    {{ range first 6 (where .Site.RegularPages "Section" "adventures") }}
+      {{ partial "adventure-card.html" . }}
+    {{ end }}
+  </div>
+</section>
+
+<section class="section section--prose">
+  <h2 class="section__title">Come funziona</h2>
+  <ol class="howto">
+    <li><strong>Scegli un caso</strong> dal dossier. Ogni avventura è un file <code>.json</code> compatibile con la versione 1 dello schema SHIC.</li>
+    <li><strong>Apri il companion</strong> su <a href="{{ .Site.Params.gameUrl }}" rel="noopener">sherlock.justplaybo.it</a>; carica l'avventura dal menu — l'app la richiede direttamente da questo archivio.</li>
+    <li><strong>Indaga.</strong> Esplora Londra, raccogli lettere cerchiate, e — quando sarai pronto — confronta la tua soluzione con quella di Holmes.</li>
+  </ol>
+</section>
+{{ end }}

@@ -1,0 +1,20 @@
+{{- /* Catalog manifest: lightweight index of every adventure for clients that want to browse. */ -}}
+{{- $items := slice -}}
+{{- range .Pages -}}
+  {{- $p := .Params -}}
+  {{- $entry := dict
+      "id"     (default .File.ContentBaseName $p.id)
+      "title"  .Title
+      "url"    .RelPermalink
+      "json"   (printf "%sindex.json" .RelPermalink)
+  -}}
+  {{- with $p.subtitle   }}{{ $entry = merge $entry (dict "subtitle"   .) }}{{ end -}}
+  {{- with $p.summary    }}{{ $entry = merge $entry (dict "summary"    .) }}{{ end -}}
+  {{- with $p.author     }}{{ $entry = merge $entry (dict "author"     .) }}{{ end -}}
+  {{- with $p.difficulty }}{{ $entry = merge $entry (dict "difficulty" .) }}{{ end -}}
+  {{- with $p.duration   }}{{ $entry = merge $entry (dict "duration"   .) }}{{ end -}}
+  {{- with $p.players    }}{{ $entry = merge $entry (dict "players"    .) }}{{ end -}}
+  {{- with $p.tags       }}{{ $entry = merge $entry (dict "tags"       .) }}{{ end -}}
+  {{- $items = $items | append $entry -}}
+{{- end -}}
+{{ dict "version" 1 "count" (len $items) "adventures" $items | jsonify (dict "indent" "  ") }}

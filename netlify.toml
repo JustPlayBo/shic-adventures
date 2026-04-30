@@ -1,0 +1,27 @@
+[build]
+  publish = "public"
+  command = "hugo --gc --minify"
+
+[build.environment]
+  HUGO_VERSION = "0.128.0"
+  HUGO_ENV = "production"
+  HUGO_ENABLEGITINFO = "true"
+
+[[headers]]
+  for = "/adventures/*"
+  [headers.values]
+    Access-Control-Allow-Origin = "*"
+    Access-Control-Allow-Methods = "GET, OPTIONS"
+    Cache-Control = "public, max-age=300, must-revalidate"
+
+[[redirects]]
+  from = "/adventures/:slug"
+  to = "/adventures/:slug/index.json"
+  status = 200
+  force = true
+
+[[redirects]]
+  from = "/adventures/:slug.json"
+  to = "/adventures/:slug/index.json"
+  status = 200
+  force = true
