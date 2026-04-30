@@ -1,6 +1,7 @@
 /* SHIC theme — Victorian sepia, brass & mahogany */
 
 :root {
+  /* Light mode (parchment by gaslight, midday) */
   --c-ink:        #2a221a;
   --c-ink-soft:   #4a3c2a;
   --c-sepia:      #f5ecd9;
@@ -13,6 +14,12 @@
   --c-oxblood:    #7a2418;
   --c-rule:       #c9b88a;
 
+  --c-code-bg:    rgba(160,140,80,.18);
+  --c-bg-overlay-1: rgba(160,140,80,.18);
+  --c-bg-overlay-2: rgba(122,36,24,.07);
+  --c-bg-overlay-3: rgba(120,90,40,.04);
+  --c-footer-overlay: rgba(120,90,40,.05);
+
   --f-display: 'Cinzel', 'IM Fell English SC', 'Trajan Pro', Georgia, serif;
   --f-body:    'EB Garamond', Garamond, Georgia, 'Times New Roman', serif;
   --f-mono:    'JetBrains Mono', 'Fira Code', 'IBM Plex Mono', ui-monospace, Menlo, monospace;
@@ -21,6 +28,37 @@
   --r-thick:   3px solid var(--c-mahogany);
   --shadow-1:  0 1px 2px rgba(60,40,15,.08), 0 4px 14px rgba(60,40,15,.06);
   --shadow-2:  0 4px 24px rgba(60,40,15,.12);
+
+  color-scheme: light;
+}
+
+/* Dark mode (gaslit study, midnight) — applied when the user explicitly
+   selects it (data-theme="dark") or, if no choice is stored, when the OS
+   prefers dark. The inline boot script in baseof.html sets data-theme up-front
+   to avoid a flash. */
+:root[data-theme="dark"] {
+  --c-ink:        #ece0bd;
+  --c-ink-soft:   #b9a87a;
+  --c-sepia:      #2c2418;
+  --c-parchment:  #16110b;
+  --c-parchment-2:#1f1810;
+  --c-brass:      #c9b07a;
+  --c-brass-deep: #a8915c;
+  --c-mahogany:   #d4a64f;
+  --c-mahogany-2: #e0b768;
+  --c-oxblood:    #d35a4a;
+  --c-rule:       #5a4a2a;
+
+  --c-code-bg:    rgba(212,166,79,.16);
+  --c-bg-overlay-1: rgba(212,166,79,.10);
+  --c-bg-overlay-2: rgba(211,90,74,.08);
+  --c-bg-overlay-3: rgba(212,166,79,.03);
+  --c-footer-overlay: rgba(212,166,79,.04);
+
+  --shadow-1:  0 1px 2px rgba(0,0,0,.5), 0 4px 14px rgba(0,0,0,.35);
+  --shadow-2:  0 4px 24px rgba(0,0,0,.55);
+
+  color-scheme: dark;
 }
 
 * { box-sizing: border-box; }
@@ -32,15 +70,16 @@ body {
   line-height: 1.65;
   color: var(--c-ink);
   background:
-    radial-gradient(1200px 600px at 20% -10%, rgba(160,140,80,.18), transparent 60%),
-    radial-gradient(900px 500px at 110% 10%, rgba(122,36,24,.07), transparent 70%),
-    repeating-linear-gradient(0deg, rgba(120,90,40,.04) 0 1px, transparent 1px 4px),
+    radial-gradient(1200px 600px at 20% -10%, var(--c-bg-overlay-1), transparent 60%),
+    radial-gradient(900px 500px at 110% 10%, var(--c-bg-overlay-2), transparent 70%),
+    repeating-linear-gradient(0deg, var(--c-bg-overlay-3) 0 1px, transparent 1px 4px),
     var(--c-parchment);
   background-attachment: fixed;
+  transition: background-color .25s ease, color .25s ease;
 }
 
 img, svg { max-width: 100%; height: auto; display: block; }
-code { font-family: var(--f-mono); font-size: .9em; background: rgba(160,140,80,.18); padding: .05em .35em; border-radius: var(--r-rad); }
+code { font-family: var(--f-mono); font-size: .9em; background: var(--c-code-bg); padding: .05em .35em; border-radius: var(--r-rad); }
 pre code { background: none; padding: 0; }
 a { color: var(--c-mahogany); text-decoration-thickness: 1px; text-underline-offset: 3px; }
 a:hover { color: var(--c-oxblood); }
@@ -94,7 +133,7 @@ hr { border: 0; border-top: 1px dashed var(--c-rule); margin: 2.5rem 0; }
 .site-footer {
   margin-top: 4rem; padding-block: 2.5rem 3rem;
   background:
-    repeating-linear-gradient(45deg, rgba(120,90,40,.05) 0 2px, transparent 2px 14px),
+    repeating-linear-gradient(45deg, var(--c-footer-overlay) 0 2px, transparent 2px 14px),
     var(--c-parchment-2);
   border-top: 1px solid var(--c-rule);
   color: var(--c-ink-soft);
@@ -312,3 +351,20 @@ hr { border: 0; border-top: 1px dashed var(--c-rule); margin: 2.5rem 0; }
 
 /* ====== Footer ornament ====== */
 .adventure__foot { padding-top: 2rem; }
+
+/* ====== Theme toggle ====== */
+.theme-toggle {
+  display: inline-flex; align-items: center; justify-content: center;
+  width: 2.2rem; height: 2.2rem; padding: 0;
+  background: transparent; color: var(--c-mahogany);
+  border: 1px solid var(--c-rule); border-radius: 999px;
+  cursor: pointer; line-height: 1;
+  transition: background .2s ease, color .2s ease, border-color .2s ease;
+}
+.theme-toggle:hover { background: var(--c-sepia); color: var(--c-oxblood); }
+.theme-toggle:focus-visible { outline: 2px solid var(--c-mahogany); outline-offset: 2px; }
+.theme-toggle__icon { width: 1.05rem; height: 1.05rem; }
+.theme-toggle__icon--sun { display: none; }
+.theme-toggle__icon--moon { display: block; }
+:root[data-theme="dark"] .theme-toggle__icon--sun { display: block; }
+:root[data-theme="dark"] .theme-toggle__icon--moon { display: none; }

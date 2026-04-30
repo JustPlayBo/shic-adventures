@@ -33,6 +33,7 @@ hugo new --kind adventure adventures/<id>.md
 |-----------------|----------|-------|
 | `id`            | yes      | Must equal the filename so the companion's `getAdventure(id)` URL resolves. |
 | `title`         | yes      | Displayed by `IntroComponent`. |
+| `author`        | no       | Author/credit for the adventure. Rendered on the themed page; falls back to the `author` front-matter field on the Markdown stub when omitted. |
 | `version`       | yes      | Currently `1`. |
 | `intro.html`    | no       | Shown by `IntroComponent` after load. HTML allowed. |
 | `solution.html` | no       | Shown by `SolutionComponent`. |

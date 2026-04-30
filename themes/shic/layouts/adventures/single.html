@@ -9,6 +9,7 @@
 {{ $data    := index .Site.Data.adventures $slug }}
 {{ $jsonURL := printf "%sindex.json" .RelPermalink }}
 {{ $advId   := default $slug $data.id }}
+{{ $author  := or $data.author $meta.author }}
 <article class="adventure">
   <header class="adventure__head">
     <p class="adventure__eyebrow">Caso · ID <code>{{ $advId }}</code> · schema v{{ default 1 $data.version }}</p>
@@ -18,7 +19,7 @@
       {{ with $meta.difficulty }}<li class="chip chip--difficulty">{{ . }}</li>{{ end }}
       {{ with $meta.duration }}<li class="chip">{{ . }}</li>{{ end }}
       {{ with $meta.players }}<li class="chip">{{ . }} investigatori</li>{{ end }}
-      {{ with $meta.author }}<li class="chip chip--ghost">di {{ . }}</li>{{ end }}
+      {{ with $author }}<li class="chip chip--ghost">di {{ . }}</li>{{ end }}
       {{ range $meta.tags }}<li class="chip chip--tag">#{{ . }}</li>{{ end }}
     </ul>
     <div class="adventure__actions">
