@@ -6,7 +6,7 @@
     <h1 class="hero__title">{{ .Site.Title }}</h1>
     <p class="hero__lede">{{ .Site.Params.description }}</p>
     <p class="hero__cta">
-      <a class="btn btn--primary" href="{{ "/adventures/" | relLangURL }}">Sfoglia il dossier</a>
+      <a class="btn btn--primary" href="{{ (.Site.GetPage "/adventures").RelPermalink }}">Sfoglia il dossier</a>
       <a class="btn btn--ghost" href="{{ .Site.Params.gameUrl }}" rel="noopener">Apri il companion</a>
     </p>
     <ul class="hero__rule">
@@ -27,7 +27,7 @@
 <section class="section">
   <header class="section__head">
     <h2 class="section__title">Avventure recenti</h2>
-    <a class="section__more" href="{{ "/adventures/" | relLangURL }}">Tutte le avventure →</a>
+    <a class="section__more" href="{{ (.Site.GetPage "/adventures").RelPermalink }}">Tutte le avventure →</a>
   </header>
   <div class="adv-grid">
     {{ range first 6 (where .Site.RegularPages "Section" "adventures") }}

@@ -1,6 +1,9 @@
+{{- $home       := .Site.Home -}}
+{{- $adventures := .Site.GetPage "/adventures" -}}
+{{- $about      := .Site.GetPage "/about" -}}
 <header class="site-header">
   <div class="container site-header__inner">
-    <a class="site-brand" href="{{ "/" | relLangURL }}">
+    <a class="site-brand" href="{{ $home.RelPermalink }}">
       <span class="site-brand__seal" aria-hidden="true">{{ partial "svg/monogram.html" . }}</span>
       <span class="site-brand__text">
         <span class="site-brand__title">{{ .Site.Title }}</span>
@@ -9,9 +12,9 @@
     </a>
     <nav class="site-nav" aria-label="Navigazione principale">
       <ul>
-        <li><a href="{{ "/" | relLangURL }}">Sala da disegno</a></li>
-        <li><a href="{{ "/adventures/" | relLangURL }}">Avventure</a></li>
-        <li><a href="{{ "/about/" | relLangURL }}">Sul caso</a></li>
+        <li><a href="{{ $home.RelPermalink }}">Sala da disegno</a></li>
+        {{ with $adventures }}<li><a href="{{ .RelPermalink }}">Avventure</a></li>{{ end }}
+        {{ with $about }}<li><a href="{{ .RelPermalink }}">Sul caso</a></li>{{ end }}
         <li><a class="site-nav__cta" href="{{ .Site.Params.gameUrl }}" rel="noopener">Apri il companion</a></li>
       </ul>
     </nav>

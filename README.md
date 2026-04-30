@@ -1,8 +1,8 @@
 # SHIC Adventures
 
-Public archive of fan-made adventures for the Italian board game *Sherlock Holmes — Consulente Investigativo*. Adventures are stored as Markdown files with the full schema in YAML front matter; Hugo renders both a Victorian-themed catalog (HTML) and machine-readable JSON consumed by the companion app at <https://sherlock.justplaybo.it/>.
+Public archive of fan-made adventures for the Italian board game *Sherlock Holmes — Consulente Investigativo*. Adventures are stored as JSON data files with thin Markdown stubs for catalog metadata; Hugo renders both a Victorian-themed catalog (HTML) and the machine-readable JSON consumed by the companion app at <https://sherlock.justplaybo.it/>.
 
-Deployment target: <https://adventures.sherlock.justplaybo.it/>.
+Deployment target: <https://justplaybo.github.io/shic-adventures/>.
 
 ## Quick start
 
@@ -44,24 +44,34 @@ The seed adventure `sample-bsi` demonstrates the full shape.
 
 ## URLs
 
+The site is published as a project page at `https://justplaybo.github.io/shic-adventures/`, so every path below is relative to that prefix.
+
 | URL                                       | Purpose |
 |-------------------------------------------|---------|
 | `/`                                       | Themed home page with featured adventures. |
 | `/adventures/`                            | Browsable catalog (HTML). |
 | `/adventures/index.json`                  | Lightweight manifest of all adventures (id, title, summary, tags…). |
-| `/adventures/<slug>/`                     | Themed single adventure page. |
-| `/adventures/<slug>/index.json`           | Adventure payload consumed by the companion (canonical, all platforms). |
-| `/adventures/<slug>.json`                 | Flat sibling of the above — emitted by the GitHub Pages workflow and by the Netlify rewrite. |
-| `/adventures/<slug>`                      | Extensionless variant — **Netlify only** (rewrite). On GitHub Pages this 301-redirects to the HTML page. |
+| `/adventures/<id>/`                       | Themed single adventure page. |
+| `/adventures/<id>/index.json`             | Adventure payload consumed by the companion. |
+| `/adventures/<id>.json`                   | Flat sibling of the above — emitted by the GitHub Pages workflow so the companion can fetch with a single deterministic path. |
 
-CORS for `/adventures/*` is open (`Access-Control-Allow-Origin: *`) so the companion can fetch payloads from a different subdomain. On GitHub Pages CORS comes for free (Pages already responds with `Access-Control-Allow-Origin: *` on every asset); on Netlify it's set explicitly via `netlify.toml` and `static/_headers`.
+The extensionless URL `/adventures/<id>` is **not** exposed on GitHub Pages — Pages 301-redirects directory-shaped URLs to the trailing-slash form, which would serve the HTML page instead of the JSON. The companion should fetch `/adventures/<id>.json` (the flat sibling); see "Companion compatibility" below.
+
+CORS comes for free on GitHub Pages — every asset is served with `Access-Control-Allow-Origin: *`, so the companion can fetch payloads cross-origin without extra configuration.
 
 ## Deployment
 
-Two paths are wired up:
+`.github/workflows/pages.yml` builds with Hugo extended on every push to `main`:
 
-- **GitHub Pages** (default) — `.github/workflows/pages.yml` builds with Hugo extended on every push to `main`, flattens the adventure JSONs to `/adventures/<slug>.json`, writes a `CNAME` for `adventures.sherlock.justplaybo.it`, and publishes via `actions/deploy-pages@v4`. Enable Pages in the repo settings with the source set to *GitHub Actions* and add the custom domain there.
-- **Netlify** — drop the repo into a Netlify site and `netlify.toml` handles the rest. The Netlify variant additionally exposes the extensionless URL `/adventures/<slug>` (matching the companion app's current fetch path) via redirect rules.
+1. Installs Hugo extended (pinned via the `HUGO_VERSION` env var).
+2. Calls `actions/configure-pages@v5` and passes the resulting `base_url` to `hugo --baseURL` so the build is correct for the project-page subpath (`/shic-adventures/`).
+3. Runs `hugo --gc --minify`.
+4. Flattens each adventure's `<id>/index.json` to a sibling `<id>.json` (sidesteps the GitHub Pages directory-redirect collision against the HTML page bundle).
+5. Uploads via `actions/upload-pages-artifact@v3` and deploys via `actions/deploy-pages@v4`.
+
+To activate, in **Settings → Pages** of the repo set **Source: GitHub Actions**. No custom domain is configured.
+
+A `netlify.toml` is also included for completeness — if you ever mirror the archive to Netlify it adds the same flat `<id>.json` sibling plus the extensionless `/adventures/<id>` rewrite that the companion's pre-existing fetch path expects. Not required for the GitHub Pages deployment.
 
 ## Theme
 
@@ -69,6 +79,12 @@ Two paths are wired up:
 
 ## Companion compatibility
 
-The companion app (`/srv/justplay-shic`, deployed as <https://sherlock.justplaybo.it>) calls `https://adventures.sherlock.justplaybo.it/adventures/<id>` and validates the payload via `AdventureService.loadAdventure`, which requires `places` to be an object. The JSON output template (`themes/shic/layouts/adventures/single.json`) emits exactly the v1 fields and nothing else, so adding new theme metadata in front matter cannot break the wire schema.
+The companion app (`/srv/justplay-shic`, deployed as <https://sherlock.justplaybo.it>) calls a remote `getAdventure(id)` endpoint and validates the payload via `AdventureService.loadAdventure`, which requires `places` to be an object. The JSON output template (`themes/shic/layouts/adventures/single.json`) renders the data file verbatim, so adding new theme metadata in the content stub cannot affect the wire schema.
 
-If this archive is hosted on GitHub Pages, update the companion's `getAdventure(id)` URL to `https://adventures.sherlock.justplaybo.it/adventures/${id}.json` (one-line change). On Netlify the existing extensionless URL keeps working untouched.
+The companion currently points at `https://adventures.sherlock.justplaybo.it/adventures/<id>` (extensionless). To consume this GitHub Pages archive, update the URL to:
+
+```
+https://justplaybo.github.io/shic-adventures/adventures/${id}.json
+```
+
+(one-line change in `AdventureService.getAdventure`).

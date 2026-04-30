@@ -67,9 +67,6 @@ jobs:
           done
           ls public/adventures/
 
-      - name: CNAME
-        run: echo "adventures.sherlock.justplaybo.it" > public/CNAME
-
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:

@@ -136,7 +136,7 @@
   <footer class="adventure__foot">
     <p class="muted">
       Endpoint API: <code>{{ $jsonURL }}</code> ·
-      Schema: <a href="{{ "/about/#schema" | relLangURL }}">v{{ default 1 $data.version }}</a>
+      Schema: <a href="{{ (.Site.GetPage "/about").RelPermalink }}#schema">v{{ default 1 $data.version }}</a>
     </p>
   </footer>
 </article>
