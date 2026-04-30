@@ -1,4 +1,4 @@
 ---
-title: "Sala da disegno"
-description: "Un archivio di avventure originali per Sherlock Holmes — Consulente Investigativo, distribuite come JSON e leggibili dal companion app."
+title: "Drawing room"
+description: "An archive of original adventures for Sherlock Holmes — Consulting Detective, distributed as JSON and read by the companion app."
 ---

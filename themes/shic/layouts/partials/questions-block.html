@@ -1,6 +1,6 @@
 {{ $block := . }}
 <div class="questions">
-  <h3 class="questions__title">{{ default "Domande" $block.title }}</h3>
+  <h3 class="questions__title">{{ default "Questions" $block.title }}</h3>
   <ol class="questions__list">
     {{ range $block.items }}
       <li class="questions__item">

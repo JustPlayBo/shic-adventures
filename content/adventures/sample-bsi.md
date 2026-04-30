@@ -8,6 +8,11 @@ author: "JustPlayBo"
 difficulty: "Introduttiva"
 duration: "60–90 min"
 players: "1–4"
+lang: "it"
+translations:
+  - lang: "en"
+    id: "sample-bsi-en"
+    label: "English"
 tags:
   - sample
   - baker-street-irregulars

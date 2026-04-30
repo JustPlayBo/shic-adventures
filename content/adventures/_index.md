@@ -1,10 +1,10 @@
 ---
-title: "Dossier delle avventure"
-description: "Tutte le avventure pubblicate. Ogni voce è disponibile come pagina sfogliabile e come payload JSON pronto per il companion."
+title: "Adventure dossier"
+description: "Every published adventure. Each one is available as a browsable page and as a JSON payload ready for the companion."
 outputs:
   - HTML
   - JSON
   - RSS
 ---
 
-Ogni avventura segue lo schema **v1** documentato nella [pagina Sul caso](../about/#schema). Per consumarla a livello programmatico, scarica il file JSON dal pulsante presente sulla scheda della singola avventura, oppure interroga l'endpoint `https://justplaybo.github.io/shic-adventures/adventures/<id>.json`.
+Every adventure follows the **v1** schema documented on the [About the case](../about/#schema) page. To consume it programmatically, download the JSON file from the button on each adventure card, or fetch the endpoint at `https://justplaybo.github.io/shic-adventures/adventures/<id>.json`.

@@ -1,6 +1,6 @@
 # SHIC Adventures
 
-Public archive of fan-made adventures for the Italian board game *Sherlock Holmes — Consulente Investigativo*. Adventures are stored as JSON data files with thin Markdown stubs for catalog metadata; Hugo renders both a Victorian-themed catalog (HTML) and the machine-readable JSON consumed by the companion app at <https://sherlock.justplaybo.it/>.
+Public archive of fan-made adventures for the board game *Sherlock Holmes — Consulting Detective*. Adventures are stored as JSON data files with thin Markdown stubs for catalog metadata; Hugo renders both a Victorian-themed catalog (HTML) and the machine-readable JSON consumed by the companion app at <https://sherlock.justplaybo.it/>. Adventures can be authored in any language and cross-linked as translations.
 
 Deployment target: <https://justplaybo.github.io/shic-adventures/>.
 
@@ -34,6 +34,8 @@ hugo new --kind adventure adventures/<id>.md
 | `id`            | yes      | Must equal the filename so the companion's `getAdventure(id)` URL resolves. |
 | `title`         | yes      | Displayed by `IntroComponent`. |
 | `author`        | no       | Author/credit for the adventure. Rendered on the themed page; falls back to the `author` front-matter field on the Markdown stub when omitted. |
+| `lang`          | no       | BCP-47 / ISO-639 language code (e.g. `"en"`, `"it"`). Surfaced as a chip in the catalog and on the adventure page. Falls back to the `lang` front-matter field. |
+| `translations`  | no       | Array of `{lang, id, label?}` linking sibling adventures in other languages. The `id` is the slug under `data/adventures/`; `label` overrides the displayed name. Falls back to the `translations` front-matter field. |
 | `version`       | yes      | Currently `1`. |
 | `intro.html`    | no       | Shown by `IntroComponent` after load. HTML allowed. |
 | `solution.html` | no       | Shown by `SolutionComponent`. |

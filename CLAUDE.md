@@ -47,7 +47,11 @@ Site is published as a project page at `https://justplaybo.github.io/shic-advent
 
 ### Wire schema (v1)
 
-Required fields in `data/adventures/<id>.json`: `id`, `title`, `version` (currently `1`), `places`. `places` keys are case-sensitive `pointId` strings; values are either a string (legacy) or `{default, conditional[]}`. Optional: `intro.html`, `solution.html`, `questions.{primary,secondary}.{title,items[]}`, `sherlockPath.steps[].{title, at, description, gains[]}`. The companion's `AdventureService.loadAdventure` validates that `places` is an object — so empty/missing `places` will break it. `sample-bsi` is the canonical example.
+Required fields in `data/adventures/<id>.json`: `id`, `title`, `version` (currently `1`), `places`. `places` keys are case-sensitive `pointId` strings; values are either a string (legacy) or `{default, conditional[]}`. Optional: `author`, `lang` (BCP-47), `translations[]` (each `{lang, id, label?}` where `id` is another adventure's slug), `intro.html`, `solution.html`, `questions.{primary,secondary}.{title,items[]}`, `sherlockPath.steps[].{title, at, description, gains[]}`. The companion's `AdventureService.loadAdventure` validates that `places` is an object — so empty/missing `places` will break it. `sample-bsi` (Italian) and `sample-bsi-en` (English) are the canonical examples and link to each other via `translations`.
+
+### Multi-language adventures
+
+Each adventure stands on its own — there is no shared parent record. To publish the same case in several languages, create a separate `<slug>.<lang>` pair (one JSON payload + one Markdown stub) per language and cross-link them via `translations`. The site chrome itself is single-language (English); only the rendered adventure body uses its own `lang` (set on the article tag) and is surfaced as a chip plus an "Also available in" linkbar.
 
 ## Theme notes
 

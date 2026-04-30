@@ -2,32 +2,32 @@
 {{ define "main" }}
 <section class="hero">
   <div class="hero__plate">
-    <p class="hero__eyebrow">221B Baker Street · Archivio</p>
+    <p class="hero__eyebrow">221B Baker Street · Archive</p>
     <h1 class="hero__title">{{ .Site.Title }}</h1>
     <p class="hero__lede">{{ .Site.Params.description }}</p>
     <p class="hero__cta">
-      <a class="btn btn--primary" href="{{ (.Site.GetPage "/adventures").RelPermalink }}">Sfoglia il dossier</a>
-      <a class="btn btn--ghost" href="{{ .Site.Params.gameUrl }}" rel="noopener">Apri il companion</a>
+      <a class="btn btn--primary" href="{{ (.Site.GetPage "/adventures").RelPermalink }}">Browse the dossier</a>
+      <a class="btn btn--ghost" href="{{ .Site.Params.gameUrl }}" rel="noopener">Open the companion</a>
     </p>
     <ul class="hero__rule">
-      <li><strong>{{ len (where .Site.RegularPages "Section" "adventures") }}</strong> avventure</li>
+      <li><strong>{{ len (where .Site.RegularPages "Section" "adventures") }}</strong> adventures</li>
       <li><strong>v1</strong> schema</li>
-      <li><strong>JSON</strong> pubblico</li>
+      <li><strong>JSON</strong> public</li>
     </ul>
   </div>
   <aside class="hero__quote">
     <blockquote>
-      «<em>Holmes</em>, gli dissi, «vedo che avete riflettuto a lungo: il fascicolo è di nuovo aperto sul tavolo.»<br>
-      Egli sorrise senza sollevare lo sguardo: «<em>Watson</em>, le avventure non si chiudono mai. Si archiviano.»
+      &ldquo;<em>Holmes</em>,&rdquo; I said, &ldquo;I see you have been reflecting for a long while: the case-file is once again open on the table.&rdquo;<br>
+      He smiled without raising his gaze. &ldquo;<em>Watson</em>, adventures are never closed. They are merely archived.&rdquo;
     </blockquote>
-    <cite>— Annotazione, taccuino di J. H. Watson</cite>
+    <cite>— Annotation, notebook of J. H. Watson</cite>
   </aside>
 </section>
 
 <section class="section">
   <header class="section__head">
-    <h2 class="section__title">Avventure recenti</h2>
-    <a class="section__more" href="{{ (.Site.GetPage "/adventures").RelPermalink }}">Tutte le avventure →</a>
+    <h2 class="section__title">Recent adventures</h2>
+    <a class="section__more" href="{{ (.Site.GetPage "/adventures").RelPermalink }}">All adventures →</a>
   </header>
   <div class="adv-grid">
     {{ range first 6 (where .Site.RegularPages "Section" "adventures") }}
@@ -37,11 +37,11 @@
 </section>
 
 <section class="section section--prose">
-  <h2 class="section__title">Come funziona</h2>
+  <h2 class="section__title">How it works</h2>
   <ol class="howto">
-    <li><strong>Scegli un caso</strong> dal dossier. Ogni avventura è un file <code>.json</code> compatibile con la versione 1 dello schema SHIC.</li>
-    <li><strong>Apri il companion</strong> su <a href="{{ .Site.Params.gameUrl }}" rel="noopener">sherlock.justplaybo.it</a>; carica l'avventura dal menu — l'app la richiede direttamente da questo archivio.</li>
-    <li><strong>Indaga.</strong> Esplora Londra, raccogli lettere cerchiate, e — quando sarai pronto — confronta la tua soluzione con quella di Holmes.</li>
+    <li><strong>Pick a case</strong> from the dossier. Each adventure is a <code>.json</code> file compatible with version 1 of the SHIC schema.</li>
+    <li><strong>Open the companion</strong> at <a href="{{ .Site.Params.gameUrl }}" rel="noopener">sherlock.justplaybo.it</a>; load the adventure from the menu — the app fetches it directly from this archive.</li>
+    <li><strong>Investigate.</strong> Roam London, gather circled letters, and — when you are ready — compare your solution with Holmes's.</li>
   </ol>
 </section>
 {{ end }}

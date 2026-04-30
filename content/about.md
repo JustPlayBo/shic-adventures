@@ -1,30 +1,34 @@
 ---
-title: "Sul caso"
-description: "Cos'è SHIC Adventures, lo schema v1 delle avventure, e come contribuire."
+title: "About the case"
+description: "What SHIC Adventures is, the v1 adventure schema, and how to contribute."
 ---
 
-Questo è l'archivio pubblico delle avventure compatibili con il companion app per *Sherlock Holmes — Consulente Investigativo* disponibile su [sherlock.justplaybo.it](https://sherlock.justplaybo.it/). Le avventure sono distribuite come file JSON con uno schema stabile, in modo che chiunque possa scriverne di nuove e aggiungerle al repository.
+This is the public archive of adventures compatible with the companion app for *Sherlock Holmes — Consulting Detective* available at [sherlock.justplaybo.it](https://sherlock.justplaybo.it/). Adventures are distributed as JSON files with a stable schema, so anyone can write new ones and add them to the repository.
 
 ## Schema {#schema}
 
-L'app valida ogni avventura caricata richiedendo, come minimo, un identificatore stabile e una mappa `places`. Le sezioni opzionali abilitano funzionalità aggiuntive nell'UI.
+The app validates each adventure on load and requires, at minimum, a stable identifier and a `places` map. Optional sections enable additional features in the UI.
 
 ```jsonc
 {
   "id": "slug",
-  "title": "Titolo dell'avventura",
+  "title": "Adventure title",
+  "lang": "en",
+  "translations": [
+    { "lang": "it", "id": "slug-it", "label": "Italiano" }
+  ],
   "version": 1,
   "intro":    { "title": "…", "html": "…" },
   "solution": { "title": "…", "html": "…" },
   "places": {
     "<pointId>": {
-      "default": "<p>indizio sempre visibile</p>",
+      "default": "<p>clue always visible</p>",
       "conditional": [
-        { "requires": ["S"],     "html": "<p>extra reveal con S</p>" },
-        { "requires": ["S","W"], "html": "<p>solo con S e W</p>" }
+        { "requires": ["S"],     "html": "<p>extra reveal with S</p>" },
+        { "requires": ["S","W"], "html": "<p>only with S and W</p>" }
       ]
     },
-    "<pointId2>": "<p>indizio semplice</p>"
+    "<pointId2>": "<p>simple clue</p>"
   },
   "questions": {
     "primary":   { "title": "…", "items": [/* { id, text, answer, points, rationale? } */] },
@@ -39,10 +43,11 @@ L'app valida ogni avventura caricata richiedendo, come minimo, un identificatore
 }
 ```
 
-- `places` è obbligatorio e deve essere un oggetto. Le chiavi corrispondono ai `pointId` definiti nella mappa interattiva.
-- I campi `intro`, `solution`, `questions` e `sherlockPath` sono opzionali. Se mancanti, l'app nasconde le voci di menu corrispondenti.
-- Le lettere in `requires` e `gains` sono normalizzate in maiuscolo.
+- `places` is required and must be an object. Keys correspond to the `pointId`s defined on the interactive map.
+- `intro`, `solution`, `questions`, and `sherlockPath` are optional. When missing, the app hides the corresponding menu entries.
+- Letters in `requires` and `gains` are normalised to upper case.
+- `lang` is a BCP-47 / ISO-639 code (e.g. `"en"`, `"it"`). When an adventure exists in several languages, list its siblings under `translations` with their `lang` and `id` (the slug under `data/adventures/`); add an optional `label` to override the display name.
 
-## Contribuire
+## Contributing
 
-L'archivio vive su GitHub: [JustPlayBo/shic-adventures](https://github.com/JustPlayBo/shic-adventures). Fai una pull request aggiungendo un file Markdown sotto `content/adventures/`, con il payload completo nel front-matter YAML, e Hugo si occuperà di pubblicarlo sia come pagina HTML sia come JSON.
+The archive lives on GitHub: [JustPlayBo/shic-adventures](https://github.com/JustPlayBo/shic-adventures). Open a pull request adding a JSON payload under `data/adventures/` and a thin Markdown stub under `content/adventures/` (matched by basename), and Hugo will publish it as both an HTML page and a JSON endpoint.

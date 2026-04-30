@@ -2,18 +2,22 @@
 {{- $items := slice -}}
 {{- range .Pages -}}
   {{- $p := .Params -}}
+  {{- $slug := .File.ContentBaseName -}}
+  {{- $data := index .Site.Data.adventures $slug -}}
   {{- $entry := dict
-      "id"     (default .File.ContentBaseName $p.id)
+      "id"     (default $slug $data.id)
       "title"  .Title
       "url"    .RelPermalink
       "json"   (printf "%sindex.json" .RelPermalink)
   -}}
   {{- with $p.subtitle   }}{{ $entry = merge $entry (dict "subtitle"   .) }}{{ end -}}
   {{- with $p.summary    }}{{ $entry = merge $entry (dict "summary"    .) }}{{ end -}}
-  {{- with $p.author     }}{{ $entry = merge $entry (dict "author"     .) }}{{ end -}}
+  {{- with (or $data.author $p.author)             }}{{ $entry = merge $entry (dict "author"       .) }}{{ end -}}
   {{- with $p.difficulty }}{{ $entry = merge $entry (dict "difficulty" .) }}{{ end -}}
   {{- with $p.duration   }}{{ $entry = merge $entry (dict "duration"   .) }}{{ end -}}
   {{- with $p.players    }}{{ $entry = merge $entry (dict "players"    .) }}{{ end -}}
+  {{- with (or $data.lang $p.lang)                 }}{{ $entry = merge $entry (dict "lang"         .) }}{{ end -}}
+  {{- with (or $data.translations $p.translations) }}{{ $entry = merge $entry (dict "translations" .) }}{{ end -}}
   {{- with $p.tags       }}{{ $entry = merge $entry (dict "tags"       .) }}{{ end -}}
   {{- $items = $items | append $entry -}}
 {{- end -}}

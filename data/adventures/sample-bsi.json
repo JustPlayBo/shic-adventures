@@ -2,6 +2,10 @@
   "id": "sample-bsi",
   "title": "L'Enigma della Piccola Lettera",
   "author": "JustPlayBo",
+  "lang": "it",
+  "translations": [
+    { "lang": "en", "id": "sample-bsi-en", "label": "English" }
+  ],
   "version": 1,
   "intro": {
     "title": "L'Enigma della Piccola Lettera",

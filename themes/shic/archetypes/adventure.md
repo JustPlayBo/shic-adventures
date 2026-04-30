@@ -8,10 +8,12 @@ author: ""
 difficulty: ""
 duration: ""
 players: ""
+lang: "en"
+translations: []
 tags: []
 outputs:
   - HTML
   - JSON
 ---
 
-Note dell'autore. Aggiungi il payload completo dell'avventura come `data/adventures/{{ .Name }}.json` (stessa basename di questo file).
+Author's notes. Add the full adventure payload as `data/adventures/{{ .Name }}.json` (same basename as this file).

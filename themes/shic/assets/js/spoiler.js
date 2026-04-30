@@ -5,6 +5,6 @@ document.querySelectorAll('[data-spoiler]').forEach(function(section){
     var open = section.getAttribute('data-spoiler-open') === 'true';
     section.setAttribute('data-spoiler-open', open ? 'false' : 'true');
     toggle.setAttribute('aria-expanded', open ? 'false' : 'true');
-    toggle.textContent = open ? 'Rivela ▸' : 'Nascondi ▾';
+    toggle.textContent = open ? 'Reveal ▸' : 'Hide ▾';
   });
 });

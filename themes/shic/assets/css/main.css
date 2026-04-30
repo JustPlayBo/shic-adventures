@@ -170,6 +170,12 @@ hr { border: 0; border-top: 1px dashed var(--c-rule); margin: 2.5rem 0; }
 .chip--points { background: var(--c-oxblood); color: var(--c-parchment); border-color: var(--c-oxblood); }
 .chip--tag { background: transparent; color: var(--c-mahogany); border-style: dashed; }
 .chip--ghost { background: transparent; }
+.chip--lang { background: var(--c-brass); color: var(--c-parchment); border-color: var(--c-brass-deep); letter-spacing: .18em; }
+.chip--lang-link { text-decoration: none; }
+.chip--lang-link:hover { background: var(--c-mahogany); border-color: var(--c-mahogany); color: var(--c-parchment); }
+
+.adventure__translations { font-family: var(--f-display); font-size: .8rem; letter-spacing: .08em; color: var(--c-ink-soft); margin: 0 0 1rem; display: flex; align-items: center; flex-wrap: wrap; gap: .4rem; }
+.adventure__translations-label { text-transform: uppercase; letter-spacing: .18em; font-size: .72rem; color: var(--c-mahogany); }
 
 /* ====== Hero ====== */
 .hero {

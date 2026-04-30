@@ -1,5 +1,10 @@
 {{ $p := . }}
-<article class="adv-card">
+{{ $slug := "" }}
+{{ with $p.File }}{{ $slug = .ContentBaseName }}{{ end }}
+{{ $data := dict }}
+{{ if $slug }}{{ $data = (index $p.Site.Data.adventures $slug) }}{{ end }}
+{{ $lang := or $data.lang $p.Params.lang }}
+<article class="adv-card"{{ with $lang }} lang="{{ . }}"{{ end }}>
   <a class="adv-card__link" href="{{ $p.RelPermalink }}">
     <header class="adv-card__head">
       <span class="adv-card__monogram" aria-hidden="true">{{ partial "svg/monogram.html" . }}</span>
@@ -12,7 +17,8 @@
     <footer class="adv-card__meta">
       {{ with $p.Params.difficulty }}<span class="chip chip--difficulty">{{ . }}</span>{{ end }}
       {{ with $p.Params.duration }}<span class="chip">{{ . }}</span>{{ end }}
-      {{ with $p.Params.players }}<span class="chip">{{ . }} investigatori</span>{{ end }}
+      {{ with $p.Params.players }}<span class="chip">{{ . }} investigators</span>{{ end }}
+      {{ with $lang }}<span class="chip chip--lang" title="Language">{{ upper . }}</span>{{ end }}
       {{ range $p.Params.tags }}<span class="chip chip--tag">#{{ . }}</span>{{ end }}
     </footer>
   </a>

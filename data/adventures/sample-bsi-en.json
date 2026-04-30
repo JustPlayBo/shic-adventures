@@ -1,0 +1,137 @@
+{
+  "id": "sample-bsi-en",
+  "title": "The Riddle of the Small Letter",
+  "author": "JustPlayBo",
+  "lang": "en",
+  "translations": [
+    { "lang": "it", "id": "sample-bsi", "label": "Italiano" }
+  ],
+  "version": 1,
+  "intro": {
+    "title": "The Riddle of the Small Letter",
+    "html": "<p>London, a drizzling afternoon. As Watson skims the <em>Times</em> beside the Baker Street fire, a Baker Street Irregular knocks at the door.</p><p>&ldquo;Mr Holmes, Mrs Carruthers sends us. Her husband has not come home in two days, and his private library has been ransacked.&rdquo;</p><p>The investigation begins at the <strong>Criterion Club</strong>, the last place Mr Carruthers was seen.</p><p><em>Hint: whenever the narration invites you to &ldquo;circle a letter&rdquo;, mark it in your notebook — some later clues will only unlock if you have collected the right letter.</em></p>"
+  },
+  "solution": {
+    "title": "Solution",
+    "html": "<p>The culprit is the butler of the Criterion Club, who had access to Mr Carruthers's private member card. The circled letters S and W tell the story: S for the <strong>Strongbox</strong> opened, W for the <strong>Wellington</strong> recovered at the Abbey.</p>"
+  },
+  "places": {
+    "3SO": {
+      "default": "<p>At the Criterion Club the doorman remembers Mr Carruthers: he came in on Wednesday afternoon and never left through the main entrance.</p><p>A private member card lies on the floor — it was not there yesterday.</p>",
+      "conditional": [
+        {
+          "requires": ["S"],
+          "html": "<p><strong>With the letter S</strong> — the member card opens a strongbox in the cellar; inside, a map of the Westminster area marked in red ink.</p>"
+        }
+      ]
+    },
+    "6SO": {
+      "default": "<p>St James's Palace is quiet. The guards have noticed nothing unusual in the past 48 hours.</p>"
+    },
+    "8SO": {
+      "default": "<p>At the Diogenes Club silence is the rule. Mycroft receives you with a nod: &ldquo;Brother of mine, if you seek a missing man, try circling the letter <strong>W</strong>.&rdquo;</p>",
+      "conditional": [
+        {
+          "requires": ["S", "W"],
+          "html": "<p><strong>With S and W</strong> — Mycroft, without raising his eyes: &ldquo;Westminster Abbey, Wellington pavilion. Your inquiry ends there.&rdquo;</p>"
+        }
+      ]
+    },
+    "17SO": {
+      "default": "<p>Westminster Abbey welcomes a few tourists. The custodian points to the chapel of St Edward.</p>",
+      "conditional": [
+        {
+          "requires": ["W"],
+          "html": "<p><strong>With the letter W</strong> — in the pavilion dedicated to Wellington you find recent traces of forced entry and a scrap of dark blue cloth, the same as Mr Carruthers's coat.</p>"
+        },
+        {
+          "requires": ["S", "W"],
+          "html": "<p><strong>With S and W</strong> — behind Wellington's tomb, a hideout contains a diary: Mr Carruthers was held there. Who led him here remains to be uncovered.</p>"
+        }
+      ]
+    }
+  },
+  "questions": {
+    "primary": {
+      "title": "Primary questions",
+      "items": [
+        {
+          "id": "p1",
+          "text": "Who is responsible for Mr Carruthers's disappearance?",
+          "answer": "The butler of the Criterion Club.",
+          "points": 15
+        },
+        {
+          "id": "p2",
+          "text": "Where was Mr Carruthers held?",
+          "answer": "In the hideout behind Wellington's tomb at Westminster Abbey.",
+          "points": 15
+        },
+        {
+          "id": "p3",
+          "text": "Which item recovered at the Criterion Club proved decisive for the inquiry?",
+          "answer": "The private member card dropped on the Club floor.",
+          "points": 10,
+          "rationale": "The card opened a strongbox containing the area map."
+        },
+        {
+          "id": "p4",
+          "text": "What allowed Mycroft to point to Westminster?",
+          "answer": "The combination of the S (strongbox) and W (Wellington) clues.",
+          "points": 10
+        }
+      ]
+    },
+    "secondary": {
+      "title": "Secondary questions",
+      "items": [
+        {
+          "id": "s1",
+          "text": "What colour is the scrap of cloth found at the Abbey?",
+          "answer": "Dark blue.",
+          "points": 5
+        },
+        {
+          "id": "s2",
+          "text": "On which day of the week did Carruthers enter the Criterion?",
+          "answer": "Wednesday afternoon.",
+          "points": 5
+        },
+        {
+          "id": "s3",
+          "text": "Who knocked on the Baker Street door at the start of the case?",
+          "answer": "A Baker Street Irregular, on behalf of Mrs Carruthers.",
+          "points": 5
+        },
+        {
+          "id": "s4",
+          "text": "Which chapel does the Abbey custodian first point to?",
+          "answer": "The chapel of St Edward (a misdirection).",
+          "points": 5
+        }
+      ]
+    }
+  },
+  "sherlockPath": {
+    "title": "Sherlock Holmes' path",
+    "steps": [
+      {
+        "at": "3SO",
+        "title": "Criterion Club",
+        "description": "Speak to the doorman, spot the member card on the floor, and inspect the strongbox in the cellar.",
+        "gains": ["S"]
+      },
+      {
+        "at": "8SO",
+        "title": "Diogenes Club",
+        "description": "Mycroft confirms the connection with Westminster; he hints that you should circle the W.",
+        "gains": ["W"]
+      },
+      {
+        "at": "17SO",
+        "title": "Westminster Abbey",
+        "description": "Find the hideout behind Wellington's tomb and Carruthers's diary."
+      }
+    ]
+  }
+}
