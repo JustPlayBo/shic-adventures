@@ -7,9 +7,10 @@
 {{ $slug    := .File.ContentBaseName }}
 {{ $meta    := .Params }}
 {{ $data    := index .Site.Data.adventures $slug }}
-{{ $jsonURL := printf "%sindex.json" .RelPermalink }}
-{{ $advId   := default $slug $data.id }}
-{{ $author  := or $data.author $meta.author }}
+{{ $jsonURL    := printf "%sindex.json" .RelPermalink }}
+{{ $jsonAbsURL := printf "%sindex.json" .Permalink }}
+{{ $advId      := default $slug $data.id }}
+{{ $author     := or $data.author $meta.author }}
 <article class="adventure">
   <header class="adventure__head">
     <p class="adventure__eyebrow">Caso · ID <code>{{ $advId }}</code> · schema v{{ default 1 $data.version }}</p>
@@ -23,7 +24,7 @@
       {{ range $meta.tags }}<li class="chip chip--tag">#{{ . }}</li>{{ end }}
     </ul>
     <div class="adventure__actions">
-      <a class="btn btn--primary" href="{{ $.Site.Params.gameUrl }}?adventure={{ $advId }}" rel="noopener">Apri nel companion</a>
+      <a class="btn btn--primary" href="{{ $.Site.Params.gameUrl }}?adventure={{ $jsonAbsURL | urlquery }}" rel="noopener">Apri nel companion</a>
       <a class="btn btn--ghost" href="{{ $jsonURL }}" download>Scarica JSON</a>
     </div>
   </header>
